@@ -29,7 +29,8 @@ jobs:
           port: 22
           source: "build/libs/*.jar"
           target: "~/app"
-
+          strip_components: 2
+      
       - name: restart application
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -38,6 +39,7 @@ jobs:
           key: ${{ secrets.SSH_KEY }}
           port: 22
           script: |
-            pkill -f 'java -jar' || true     
-            nohup java -jar ~/app/*.jar --spring.profiles.active=prod \
+            pkill -f 'java -jar' || true
+            JAR=$(ls ~/app/*.jar | head -n 1)   # 방금 복사된 파일 선택
+            nohup java -jar "$JAR" --spring.profiles.active=prod \
               > ~/app/nohup.out 2>&1 &
