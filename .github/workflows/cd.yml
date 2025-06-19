@@ -41,7 +41,7 @@ jobs:
           timeout: 60s
           command_timeout: 15m
           script: |
-            pkill -f 'java -jar' || true
+            fuser -k 8080/tcp || true
             JAR=$(ls ~/app/*.jar | head -n 1)
             nohup java -jar "$JAR" --spring.profiles.active=prod \
               > ~/app/nohup.out 2>&1 &
