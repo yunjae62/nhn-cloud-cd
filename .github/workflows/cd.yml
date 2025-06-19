@@ -38,8 +38,10 @@ jobs:
           username: ${{ secrets.SSH_USER }}
           key: ${{ secrets.SSH_KEY }}
           port: 22
+          timeout: 60s
+          command_timeout: 15m
           script: |
             pkill -f 'java -jar' || true
-            JAR=$(ls ~/app/*.jar | head -n 1)   # 방금 복사된 파일 선택
+            JAR=$(ls ~/app/*.jar | head -n 1)
             nohup java -jar "$JAR" --spring.profiles.active=prod \
               > ~/app/nohup.out 2>&1 &
